@@ -17,12 +17,23 @@ class UserServiceTest extends AbstractTest {
 
     @Test
     void get() {
-        User user1 = userService.create(new User("Test1", "test1@mail.ru"));
-        User user2 = userService.create(new User("Test2", "test2@mail.ru"));
+        User user1 = userService.create(new User("Ivan", "ivan@mail.ru"));
+        User user2 = userService.create(new User("Sergey", "sergey@mail.ru"));
         getAndPrint(user1.getId());
         getAndPrint(user2.getId());
         getAndPrint(user2.getId());
         getAndPrint(user2.getId());
+    }
+
+    @Test
+    void create() {
+        createAndPrint("Ivan", "ivan@mail.ru");
+        createAndPrint("Ivan", "ivan1122@mail.ru");
+        createAndPrint("Sergey", "ivan@mail.ru");
+    }
+
+    private void createAndPrint(String name, String email) {
+        LOGGER.info("created user: {}", userService.create(name, email));
     }
 
     private void getAndPrint(Long id) {
