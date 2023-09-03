@@ -14,4 +14,8 @@ public interface UserService {
 
     User createAndRefreshCache(User user);
 
+    void delete(Long id);
+
+    void deleteAndEvict(Long id);
+
 }

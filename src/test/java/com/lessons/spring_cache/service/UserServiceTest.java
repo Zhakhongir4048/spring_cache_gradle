@@ -2,6 +2,7 @@ package com.lessons.spring_cache.service;
 
 import com.lessons.spring_cache.AbstractTest;
 import com.lessons.spring_cache.entity.User;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +46,22 @@ class UserServiceTest extends AbstractTest {
 
         User user4 = userService.createOrReturnCached(new User("Vasya", "petya@mail.ru"));
         LOGGER.info("created user4: {}", user4);
+    }
+
+    @Test
+    public void delete() {
+        User user1 = userService.create(new User("Vasya", "vasya@mail.ru"));
+        LOGGER.info("{}", userService.get(user1.getId()));
+
+        User user2 = userService.create(new User("Vasya", "vasya@mail.ru"));
+        LOGGER.info("{}", userService.get(user2.getId()));
+
+        userService.delete(user1.getId());
+        userService.deleteAndEvict(user2.getId());
+
+        LOGGER.info("{}", userService.get(user1.getId()));
+        Assertions.assertThatThrownBy(() -> userService.get(user2.getId()))
+                .hasMessage("User not found by id 2");
     }
 
     private void createAndPrint(String name, String email) {
