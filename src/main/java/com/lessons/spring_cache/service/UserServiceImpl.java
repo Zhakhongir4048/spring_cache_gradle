@@ -5,6 +5,7 @@ import com.lessons.spring_cache.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,20 @@ public class UserServiceImpl implements UserService {
         return userRepository.findById(id).orElseThrow(
                 () -> new EntityNotFoundException("User not found by id " + id)
         );
+    }
+
+    @Override
+    @Cacheable(value = "users", key = "#user.name")
+    public User createOrReturnCached(User user) {
+        log.info("creating user: {}", user);
+        return userRepository.save(user);
+    }
+
+    @Override
+    @CachePut(value = "users", key = "#user.name")
+    public User createAndRefreshCache(User user) {
+        log.info("creating user: {}", user);
+        return userRepository.save(user);
     }
 
 }

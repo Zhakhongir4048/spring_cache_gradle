@@ -32,6 +32,21 @@ class UserServiceTest extends AbstractTest {
         createAndPrint("Sergey", "ivan@mail.ru");
     }
 
+    @Test
+    void createAndRefresh() {
+        User user1 = userService.createOrReturnCached(new User("Vasya", "vasya@mail.ru"));
+        LOGGER.info("created user1: {}", user1);
+
+        User user2 = userService.createOrReturnCached(new User("Vasya", "misha@mail.ru"));
+        LOGGER.info("created user2: {}", user2);
+
+        User user3 = userService.createAndRefreshCache(new User("Vasya", "kolya@mail.ru"));
+        LOGGER.info("created user3: {}", user3);
+
+        User user4 = userService.createOrReturnCached(new User("Vasya", "petya@mail.ru"));
+        LOGGER.info("created user4: {}", user4);
+    }
+
     private void createAndPrint(String name, String email) {
         LOGGER.info("created user: {}", userService.create(name, email));
     }

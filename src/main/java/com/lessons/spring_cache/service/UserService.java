@@ -10,4 +10,8 @@ public interface UserService {
 
     User get(Long id);
 
+    User createOrReturnCached(User user);
+
+    User createAndRefreshCache(User user);
+
 }
