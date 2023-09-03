@@ -64,6 +64,19 @@ class UserServiceTest extends AbstractTest {
                 .hasMessage("User not found by id 2");
     }
 
+    @Test
+    public void checkSettings() throws InterruptedException {
+        User user1 = userService.createOrReturnCached(new User("Vasya", "vasya@mail.ru"));
+        LOGGER.info("{}", userService.get(user1.getId()));
+
+        User user2 = userService.createOrReturnCached(new User("Vasya", "vasya@mail.ru"));
+        LOGGER.info("{}", userService.get(user2.getId()));
+
+        Thread.sleep(1000L);
+        User user3 = userService.createOrReturnCached(new User("Vasya", "vasya@mail.ru"));
+        LOGGER.info("{}", userService.get(user3.getId()));
+    }
+    
     private void createAndPrint(String name, String email) {
         LOGGER.info("created user: {}", userService.create(name, email));
     }

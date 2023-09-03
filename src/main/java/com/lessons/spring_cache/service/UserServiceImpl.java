@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -67,6 +68,23 @@ public class UserServiceImpl implements UserService {
     public void deleteAndEvict(Long id) {
         log.info("deleting user by id: {}", id);
         userRepository.deleteById(id);
+    }
+
+    @Caching(
+            cacheable = {
+                    @Cacheable("users"),
+                    @Cacheable("contacts")
+            },
+            put = {
+                    @CachePut("tables"),
+                    @CachePut("chairs"),
+                    @CachePut(value = "meals", key = "#user.email")
+            },
+            evict = {
+                    @CacheEvict(value = "services", key = "#user.name")
+            }
+    )
+    void cacheExample(User user) {
     }
 
 }
